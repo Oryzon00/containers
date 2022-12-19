@@ -1,0 +1,63 @@
+3containers
+- vector (tableau a tailledynamique)
+- map(dictionnaire key - value)
+- stack (paquet de carte)
+- set (bonus)
+
+Tools:
+--> commencer par les Tools
+
+1) is_integral
+2) enable_if (utiliser is_integral)
+3) lexiographical_compare
+4) pair et make pair
+5) iterator_traits --> specification de iterator // permet a la lib algorithm de savoir de que l'algo on parle
+
+6) iterator de vector
+7) reverse_ite de vector
+8) vector
+
+9) stack a partir de vector
+
+10) RB tree
+11) iter + reverse de map
+
+
+namespace ft
+{
+	tout dedans
+}
+
+ineriction d'utiliser new
+
+std::allocator --> objet
+	allocator.allocate(type *cible, nb_de_cible);
+	allocator.deallocate(type * cible); --> comme free
+	allocator.destroy(); --> detruire l' objet (appel son destru) mais dealloue pas
+
+= dans param temple --> propose option par default si non precise
+
+membertypes --> typedef en PUBLIC  
+
+
+template <class T> class vector_it
+{
+
+}
+
+template < class T, class Alloc = allocator<T> > class vector
+{
+	public:
+			//peut etre inverser les deux parms peut etre?
+			typedef value_type 		T;
+			typedef allocator_type 	Alloc
+			typedef	reference		allocator_type::reference
+			.....
+			typedef	iterator		vector_it<value_type>
+}
+ex: 
+
+-->demander expliatin types iterators 
+--> demander exlication difference_type
+--> demander explication size_type
+--> demander explication is_integral
