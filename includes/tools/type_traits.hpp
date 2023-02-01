@@ -7,7 +7,7 @@ namespace ft
 
 /*  
 ----- ENABLE_IF ----- 
-B is true, std::enable_if has a public member typedef type, equal to T; 
+If B is true, std::enable_if has a public member typedef type, equal to T; 
 otherwise, there is no member typedef.
 This metafunction is a convenient way to leverage SFINAE prior to C++20's concepts
 
@@ -85,11 +85,12 @@ Otherwise, value is equal to false.
 template <class T> struct is_integral_base					: ft::false_type	{};
 
 // Pas d'arg class T car c'est une specificite d'une template deja definit
-template <> struct is_integral_base <bool>					: ft::true_type		{};	
+template <> struct is_integral_base <bool>					: ft::true_type		{};
+template <> struct is_integral_base <short>					: ft::true_type 	{};	
 template <> struct is_integral_base <char>					: ft::true_type 	{};	
 template <> struct is_integral_base <wchar_t>				: ft::true_type 	{};	
-template <> struct is_integral_base <char16_t>				: ft::true_type 	{};
-template <> struct is_integral_base <char32_t>				: ft::true_type 	{};	
+// template <> struct is_integral_base <char16_t>				: ft::true_type 	{};
+// template <> struct is_integral_base <char32_t>				: ft::true_type 	{};	
 template <> struct is_integral_base <int>					: ft::true_type 	{};	
 template <> struct is_integral_base <long>					: ft::true_type 	{};	
 template <> struct is_integral_base <long long>				: ft::true_type		{};
@@ -109,7 +110,7 @@ template <class T> struct is_integral	: is_integral_base <typename ft::remove_cv
 template <class T>
 void	swap(T & a, T & b)
 {
-	T	tmp = a;
+	T	tmp(a); // tmp = a (a voir sur les swaps de vector et les iters)
 	a = b;
 	b = tmp;
 }
