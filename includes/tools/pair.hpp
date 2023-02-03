@@ -34,7 +34,7 @@ struct pair
 	template <class U1, class U2>
 	pair(const pair <U1, U2> & p) : first(p.first), second(p.second)	{};
 
-	/* ---------- OPERATOR OVERLOAD ---------- */
+	/* ---------- OPERATOR ---------- */
 
 	/* Operator = */
 	pair &	operator=(const pair & p)

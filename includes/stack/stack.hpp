@@ -26,37 +26,71 @@ class stack
 	typedef	Container	container_type;
 	typedef	size_t		size_type;
 
-	private:
+	protected:
 	/* ---------- MEMBER VARIABLES ----------- */
-	container_type	_array;
+	container_type	c;
 
 	public:
 	/* ---------- CONSTRUCTORS ----------- */
-	explicit	stack(const container_type & cntr = container_type())
+	explicit	stack(const container_type & cntr = container_type())	:	_array(cntr)	{}
+
+
+	/* ---------- OPERATOR ---------- */	
+	stack &		operator=(const stack & other)
 	{
-		
+		c = other.c;
+		return (*this);
 	}
 
-
-	/* ---------- OPERATOR OVERLOAD ---------- */	
-
-
-
-
-
-
-
+	/* ---------- MEMBER FUNCTIONS ---------- */
+	bool				empty() const				{ return c.empty(); }
+	size_type			size() const				{ return c.size();	}
+	value_type &		top()						{ return c.back();	}
+	const value_type &	top() const					{ return c.back();	}
+	void				push(const value_type & x)	{ c.push_back(x);	}
+	void				pop()						{ c.pop_back();		}
 
 };
 
+/* ---------- NON MEMBER FUNCTIONS ---------- */
+
+template <class T, class Container>
+bool operator==(const stack<T, Container> & lhs, const stack<T, Container> & rhs)
+{
+	return ( lhs.c == rhs.c);
+}
+
+template <class T, class Container>
+bool operator!=(const stack<T, Container> & lhs, const stack<T, Container> & rhs)
+{
+	return ( lhs.c != rhs.c);
+}
+
+template <class T, class Container>
+bool operator< (const stack<T, Container> & lhs, const stack<T, Container> & rhs)
+{
+	return ( lhs.c < rhs.c);
+}
 
 
+template <class T, class Container>
+bool operator> (const stack<T, Container> & lhs, const stack<T, Container> & rhs)
+{
+	return ( lhs.c > rhs.c);
+}
 
+template <class T, class Container>
+bool operator>=(const stack<T, Container> & lhs, const stack<T, Container> & rhs)
+{
+	return ( lhs.c >= rhs.c);
+}
 
+template <class T, class Container>
+bool operator<=(const stack<T, Container> & lhs, const stack<T, Container> & rhs)
+{
+	return ( lhs.c <= rhs.c);
+}
 
-
-
-
-
+/*------------------------------------------------------------------------------------------------*/
 
 }
