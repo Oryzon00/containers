@@ -14,9 +14,11 @@ A pair is a specific case of a std::tuple with two elements.
 template <class T1, class T2>
 struct pair
 {
+	/* ---------- MEMBER TYPES ----------- */
 	typedef	T1	first_type;
 	typedef	T2	second_type;
 
+	/* ---------- MEMBER VARIABLES ----------- */
 	T1	first;
 	T2	second;
 
@@ -27,7 +29,6 @@ struct pair
 
 	/* Initialization constructor */
 	pair( const T1 & x, const T2 & y )	: first(x), second(y)	{};
-
 
 	/* Copy constructor */
 	template <class U1, class U2>
