@@ -24,12 +24,124 @@ struct iterator
 	typedef	Pointer		pointer;
 	typedef	Reference	reference;
 
-	
 };
 
 
 /*------------------------------------------------------------------------------------------------*/
 
+/*
+----- ITERATOR_TAG -----
+Empty class to identify the category of an iterator 
+*/
+
+struct random_access_iterator_tag {};
+struct bidirectional_iterator_tag {};
+
+
+/*------------------------------------------------------------------------------------------------*/
+
+/* 
+----- ITERATOR_TRAITS ----- 
+std::iterator_traits is the type trait class that provides uniform interface to the properties 
+of LegacyIterator types. 
+This makes it possible to implement algorithms only in terms of iterators.
+*/
+
+template <class Iter>
+struct iterator_traits
+{
+	typedef	typename Iter::difference_type			difference_type;
+	typedef	typename Iter::value_type				value_type;
+	typedef	typename Iter::pointer					pointer;
+	typedef	typename Iter::reference				reference;
+	typedef	typename Iter::iterator_category		iterator_category;
+};
+
+template <class T>
+struct iterator_traits <T*>
+{
+	typedef	std::ptrdiff_t							difference_type;
+	typedef	T										value_type;
+	typedef	T*										pointer;
+	typedef	T&										reference;
+	typedef	ft::random_access_iterator_tag			iterator_category;
+};
+
+template <class T>
+struct iterator_traits <const T*>
+{
+	typedef	std::ptrdiff_t							difference_type;
+	typedef	T										value_type;
+	typedef	const T*								pointer;
+	typedef	const T&								reference;
+	typedef	ft::random_access_iterator_tag			iterator_category;
+};
+
+
+/*------------------------------------------------------------------------------------------------*/
+
+/*
+----- REVERSE_ITERATOR -----
+This class reverses the direction in which a bidirectional or random-access iterator iterates
+through a range.
+*/
+
+template <class Iterator>
+class reverse_iterator : public
+	  iterator<typename iterator_traits<Iterator>::iterator_category,
+	  		   typename iterator_traits<Iterator>::value_type,
+			   typename iterator_traits<Iterator>::difference_type,
+			   typename iterator_traits<Iterator>::pointer,
+			   typename iterator_traits<Iterator>::reference>
+{
+	protected:
+		Iterator	current;
+	
+	public:
+		/* MEMBER TYPES */
+		typedef				Iterator									iterator_type;
+		typedef	typename	iterator_traits<Iterator>::difference_type	difference_type;
+		typedef	typename	iterator_traits<Iterator>::reference		reference;
+		typedef	typename	iterator_traits<Iterator>::pointer			pointer;
+
+		/* DEFAULT CONSTRUCTOR */
+		reverse_iterator()									current()				{};
+
+		/* INITIALIZATION CONSTRUCTOR */
+		explicit	reverse_iterator(Iterator it)			current(it)				{};
+
+		/* COPY CONSTRUCTOR */
+		template <class U>
+		reverse_iterator(const reverse_iterator<U> & other)	current(other.current)	{};
+
+		/* ACCESSORS */
+		Iterator	base() const		{ return (current) };
+
+		reference	operator*() const
+		{
+			Iterator	tmp = current;
+			return (*--tmp);
+		}
+
+		pointer		operator->() const
+		{
+			Iterator	tmp = current;
+			return &(operator*());
+		}
+
+		reference	operator[](difference_type n) const
+		{
+			return current[-n - 1];
+		}
+
+		/* MOVEMENTS */
+
+
+
+
+
+		
+}
 
 
 
