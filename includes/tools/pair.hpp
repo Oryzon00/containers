@@ -36,7 +36,6 @@ struct pair
 
 	/* ---------- OPERATOR ---------- */
 
-	/* Operator = */
 	pair &	operator=(const pair & p)
 	{
 		first = p.first;
@@ -45,44 +44,38 @@ struct pair
 	}
 };
 
-/* ---------- NON MEMBER FUNCTIONS ---------- */
+/* ---------- COMPARAISON OPERATORS ---------- */
 
-/* Operator == */
 template <class T1, class T2>
   bool operator== (const pair<T1,T2> & lhs, const pair<T1,T2> & rhs)
 {
 	return lhs.first==rhs.first && lhs.second==rhs.second;
 }
 
-/* Operator != */
 template <class T1, class T2>
   bool operator!= (const pair<T1,T2> & lhs, const pair<T1,T2> & rhs)
 {
 	return !(lhs==rhs);
 }
 
-/* Operator < */
 template <class T1, class T2>
   bool operator<  (const pair<T1,T2> & lhs, const pair<T1,T2> & rhs)
 {
 	return lhs.first<rhs.first || (!(rhs.first<lhs.first) && lhs.second<rhs.second);
 }
 
-/* Operator <= */
 template <class T1, class T2>
   bool operator<= (const pair<T1,T2> & lhs, const pair<T1,T2> & rhs)
 {
 	return !(rhs<lhs);
 }
 
-/* Operator > */
 template <class T1, class T2>
   bool operator>  (const pair<T1,T2> & lhs, const pair<T1,T2> & rhs)
 {
 	return rhs<lhs;
 }
 
-/* Operator >= */
 template <class T1, class T2>
   bool operator>= (const pair<T1,T2> & lhs, const pair<T1,T2> & rhs)
 {
