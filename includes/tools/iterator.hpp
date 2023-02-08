@@ -26,6 +26,19 @@ struct iterator
 
 };
 
+template < class Category, class T,
+	class Distance = std::ptrdiff_t, class Pointer = T*, class Reference = T& >
+struct const_iterator
+{
+	/* MEMBER TYPES */
+	typedef	Category	iterator_category;
+	typedef	T			value_type;
+	typedef	Distance	difference_type;
+	typedef	Pointer		pointer;
+	typedef	Reference	reference;
+
+};
+
 
 /*------------------------------------------------------------------------------------------------*/
 
@@ -101,12 +114,14 @@ class reverse_iterator : public
 	
 	public:
 		/* ---------- MEMBER TYPES ----------- */
-		typedef				Iterator									iterator_type;
-		typedef	typename	iterator_traits<Iterator>::difference_type	difference_type;
-		typedef	typename	iterator_traits<Iterator>::reference		reference;
-		typedef	typename	iterator_traits<Iterator>::pointer			pointer;
+		typedef				Iterator										iterator_type;
+		typedef	typename	iterator_traits<Iterator>::iterator_category	iterator_category;
+		typedef	typename	iterator_traits<Iterator>::value_type			value_type;
+		typedef	typename	iterator_traits<Iterator>::difference_type		difference_type;
+		typedef	typename	iterator_traits<Iterator>::pointer				pointer;
+		typedef	typename	iterator_traits<Iterator>::reference			reference;
 
-		/* ---------- CONSTRUCTORS ----------- */
+		/* ---------- CONSTRUCTORS / DESTRUCTOR ----------- */
 
 		/* DEFAULT CONSTRUCTOR */
 		reverse_iterator()									current()				{};
@@ -116,14 +131,20 @@ class reverse_iterator : public
 
 		/* COPY CONSTRUCTOR */
 		template <class U>
-		reverse_iterator(const reverse_iterator<U> & other)	current(other.current)	{};
+		reverse_iterator(const reverse_iterator<U> & other)	current(other.base())	{};
+
+		/* DESTRUCTOR */
+		~reverse_iterator()															{};
 
 		/* ---------- OPERATOR ---------- */
+
+		reverse_iterator&
+		operator=(const reverse_iterator<U> & other)	{ current = other.base(); return *this; }
 	
 		/* ACCESSORS */
-		Iterator	base() const		{ return (current) };
+		Iterator	base() const		{ return current; }
 		reference	operator*() const	{ Iterator	tmp = current; return (*--tmp); }
-		pointer		operator->() const	{ Iterator	tmp = current; return &(operator*()); }
+		pointer		operator->() const	{ return &(operator*()); }
 		reference	operator[](difference_type n) const	{ return current[-n - 1]; }
 
 		/* PRE INCREMENT OPERATORS */
@@ -134,6 +155,7 @@ class reverse_iterator : public
 		reverse_iterator	operator++(int)	{ reverse_iterator tmp = *this; --current; return tmp; }
 		reverse_iterator	operator--(int)	{ reverse_iterator tmp = *this; ++current; return tmp; }
 
+		/* ARITHMETIC OPERATORS */
 		reverse_iterator
 		operator+ (difference_type n) const	{ return reverse_iterator(current - n); }
 		reverse_iterator&
@@ -146,7 +168,9 @@ class reverse_iterator : public
 
 };
 
-/* ---------- COMPARAISON OPERATORS ---------- */
+/* ----------  NON MEMBER FUNCTIONS ---------- */
+
+/* COMPARAISON OPERATORS */
 
 template <class Iterator1, class Iterator2>
  bool	operator==(const ft::reverse_iterator<Iterator1> & lhs,
@@ -190,10 +214,12 @@ template <class Iterator1, class Iterator2>
 	return lhs.base() <= rhs.base();
 }
 
+/* ARITHMETIC OPERATORS */
+
 template <class Iterator>
 reverse_iterator<Iterator>
 	operator+(typename reverse_iterator<Iterator>::difference_type n,
-									  const reverse_iterator<Iterator> & it)
+			  const reverse_iterator<Iterator> & it)
 {
 	return ( reverse_iterator<Iterator>(it.base() - n ) );
 }
@@ -206,17 +232,94 @@ typename reverse_iterator<Iterator1>::difference_type
 	return ( rhs.base() - lhs.base() );
 }
 
+/*------------------------------------------------------------------------------------------------*/
+
+/*
+----- RANDOM ACCESS ITERATOR -----
+A LegacyRandomAccessIterator is a LegacyBidirectionalIterator that can be moved to point
+to any element in constant time.
+If a LegacyRandomAccessIterator it originates from a Container, then it's value_type is
+the same as the container's, so dereferencing (*it) obtains the container's value_type.
+A pointer to an element of an array satisfies all requirements of LegacyRandomAccessIterator.
+*/
+
+template  <class Iterator>
+class random_access_iterator : public
+	  iterator<typename iterator_traits<Iterator>::iterator_category,
+	  		   typename iterator_traits<Iterator>::value_type,
+			   typename iterator_traits<Iterator>::difference_type,
+			   typename iterator_traits<Iterator>::pointer,
+			   typename iterator_traits<Iterator>::reference>
+{
+	protected:
+		/* ---------- MEMBER VARIABLES ----------- */
+		Iterator	current;
+	
+	public:
+		/* ---------- MEMBER TYPES ----------- */
+		typedef				Iterator										iterator_type;
+		typedef	typename	iterator_traits<Iterator>::iterator_category	iterator_category;
+		typedef	typename	iterator_traits<Iterator>::value_type			value_type;
+		typedef	typename	iterator_traits<Iterator>::difference_type		difference_type;
+		typedef	typename	iterator_traits<Iterator>::pointer				pointer;
+		typedef	typename	iterator_traits<Iterator>::reference			reference;
+
+		/* ---------- CONSTRUCTORS / DESTRUCTOR ----------- */
+
+		/* DEFAULT CONSTRUCTOR */
+		random_access_iterator()										current()				{};
+
+		/* INITIALIZATION CONSTRUCTOR */
+		explicit	random_access_iterator(Iterator it)					current(it)				{};
+
+		/* COPY CONSTRUCTOR */
+		template <class U>
+		random_access_iterator(const random_access_iterator<U> & other)	current(other.base())	{}
+
+		/* DESTRUCTOR */
+		~random_access_iterator()																{};
+
+		/* ---------- OPERATOR ---------- */
+
+		random_access_iterator&
+		operator=(const random_access_iterator<U> & other)	{ current = other.base(); return *this; }
+
+		/* ACCESSORS */
+		Iterator	base() const						{ return current;			}
+		reference	operator* () const					{ return *current;			}
+		pointer		operator->() const					{ return &(operator*());	}
+		reference	operator[](difference_type n) const	{ return current[n];		}
+
+		/* PRE INCREMENT OPERATORS */
+
+
+		/* POST INCREMENT OPERATORS */
+
+
+		/* ARITHMETIC OPERATORS */
 
 
 
 
+};
+
+/* ----------  NON MEMBER FUNCTIONS ---------- */
+
+/* COMPARAISON OPERATORS */
+
+/* ARITHMETIC OPERATORS */
 
 
 
+/*------------------------------------------------------------------------------------------------*/
 
-
-
-
+/*
+----- BIDIRRECTIONNAL ITERATOR -----
+A LegacyBidirectionalIterator is a LegacyForwardIterator that can be moved in both directions 
+(i.e. incremented and decremented).
+If a LegacyBidirectionalIterator it originates from a Container, then it's value_type is
+the same as the container's, so dereferencing (*it) obtains the container's value_type.
+*/
 
 
 	
