@@ -440,7 +440,6 @@ class bidirectional_iterator : public
 		bidirectional_iterator&	operator++()	{ ++current; return *this; }
 		bidirectional_iterator&	operator--()	{ --current; return *this; }
 
-
 		/* POST INCREMENT OPERATORS */
 		bidirectional_iterator
 			operator++(int)	{ bidirectional_iterator tmp = *this; ++current; return tmp; }
