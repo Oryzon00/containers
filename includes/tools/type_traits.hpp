@@ -84,7 +84,6 @@ Otherwise, value is equal to false.
 
 template <class T> struct is_integral_base					: ft::false_type	{};
 
-// Pas d'arg class T car c'est une specificite d'une template deja definit
 template <> struct is_integral_base <bool>					: ft::true_type		{};
 template <> struct is_integral_base <short>					: ft::true_type 	{};	
 template <> struct is_integral_base <char>					: ft::true_type 	{};	
