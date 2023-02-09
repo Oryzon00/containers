@@ -390,6 +390,64 @@ If a LegacyBidirectionalIterator it originates from a Container, then it's value
 the same as the container's, so dereferencing (*it) obtains the container's value_type.
 */
 
+template  <class Iterator>
+class bidirectional_iterator : public
+	  iterator<typename iterator_traits<Iterator>::iterator_category,
+	  		   typename iterator_traits<Iterator>::value_type,
+			   typename iterator_traits<Iterator>::difference_type,
+			   typename iterator_traits<Iterator>::pointer,
+			   typename iterator_traits<Iterator>::reference>
+{
+	protected:
+		/* ---------- MEMBER VARIABLES ----------- */
+		Iterator	current;
+	
+	public:
+		/* ---------- MEMBER TYPES ----------- */
+		typedef				Iterator										iterator_type;
+		typedef	typename	iterator_traits<Iterator>::iterator_category	iterator_category;
+		typedef	typename	iterator_traits<Iterator>::value_type			value_type;
+		typedef	typename	iterator_traits<Iterator>::difference_type		difference_type;
+		typedef	typename	iterator_traits<Iterator>::pointer				pointer;
+		typedef	typename	iterator_traits<Iterator>::reference			reference;
+
+		/* ---------- CONSTRUCTORS / DESTRUCTOR ----------- */
+
+		/* DEFAULT CONSTRUCTOR */
+		bidirectional_iterator()										current()				{}
+
+		/* INITIALIZATION CONSTRUCTOR */
+		explicit	bidirectional_iterator(Iterator it)					current(it)				{}
+
+		/* COPY CONSTRUCTOR */
+		template <class U>
+		bidirectional_iterator(const bidirectional_iterator<U> & other)	current(other.base())	{}
+
+		/* DESTRUCTOR */
+		~bidirectional_iterator()																{}
+
+		/* ---------- OPERATOR ---------- */
+
+		bidirectional_iterator&
+		operator=(const bidirectional_iterator<U> & other)	{ current = other.base(); return *this; }
+
+		/* ACCESSORS */
+		Iterator	base() const						{ return current;			}
+		reference	operator* () const					{ return *current;			}
+		pointer		operator->() const					{ return &(operator*());	}
+
+		/* PRE INCREMENT OPERATORS */
+		bidirectional_iterator&	operator++()	{ ++current; return *this; }
+		bidirectional_iterator&	operator--()	{ --current; return *this; }
+
+
+		/* POST INCREMENT OPERATORS */
+		bidirectional_iterator
+			operator++(int)	{ bidirectional_iterator tmp = *this; ++current; return tmp; }
+		bidirectional_iterator
+			operator--(int)	{ bidirectional_iterator tmp = *this; --current; return tmp; }
+
+};
 
 	
 }
