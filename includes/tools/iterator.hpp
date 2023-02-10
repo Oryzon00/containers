@@ -123,21 +123,22 @@ class reverse_iterator : public
 
 		/* ---------- CONSTRUCTORS / DESTRUCTOR ----------- */
 
-		/* DEFAULT CONSTRUCTOR */
-		reverse_iterator()									current()				{}
+		/* DEFAULT CONSTRUCTOR */	
+		reverse_iterator()									:	current()				{}
 
 		/* INITIALIZATION CONSTRUCTOR */
-		explicit	reverse_iterator(Iterator it)			current(it)				{}
+		explicit	reverse_iterator(Iterator it)			:	current(it)				{}
 
 		/* COPY CONSTRUCTOR */
 		template <class U>
-		reverse_iterator(const reverse_iterator<U> & other)	current(other.base())	{}
+		reverse_iterator(const reverse_iterator<U> & other)	:	current(other.base())	{}
 
 		/* DESTRUCTOR */
-		~reverse_iterator()															{}
+		~reverse_iterator()																{}
 
 		/* ---------- OPERATOR ---------- */
 
+		template <class U>
 		reverse_iterator&
 		operator=(const reverse_iterator<U> & other)	{ current = other.base(); return *this; }
 	
@@ -267,20 +268,21 @@ class random_access_iterator : public
 		/* ---------- CONSTRUCTORS / DESTRUCTOR ----------- */
 
 		/* DEFAULT CONSTRUCTOR */
-		random_access_iterator()										current()				{}
+		random_access_iterator()										: current()				{}
 
 		/* INITIALIZATION CONSTRUCTOR */
-		explicit	random_access_iterator(Iterator it)					current(it)				{}
+		explicit	random_access_iterator(Iterator it)					: current(it)			{}
 
 		/* COPY CONSTRUCTOR */
 		template <class U>
-		random_access_iterator(const random_access_iterator<U> & other)	current(other.base())	{}
+		random_access_iterator(const random_access_iterator<U> & other)	: current(other.base())	{}
 
 		/* DESTRUCTOR */
 		~random_access_iterator()																{}
 
 		/* ---------- OPERATOR ---------- */
 
+		template <class U>
 		random_access_iterator&
 		operator=(const random_access_iterator<U> & other)	{ current = other.base(); return *this; }
 
@@ -414,20 +416,21 @@ class bidirectional_iterator : public
 		/* ---------- CONSTRUCTORS / DESTRUCTOR ----------- */
 
 		/* DEFAULT CONSTRUCTOR */
-		bidirectional_iterator()										current()				{}
+		bidirectional_iterator()										: current()				{}
 
 		/* INITIALIZATION CONSTRUCTOR */
-		explicit	bidirectional_iterator(Iterator it)					current(it)				{}
+		explicit	bidirectional_iterator(Iterator it)					: current(it)			{}
 
 		/* COPY CONSTRUCTOR */
 		template <class U>
-		bidirectional_iterator(const bidirectional_iterator<U> & other)	current(other.base())	{}
+		bidirectional_iterator(const bidirectional_iterator<U> & other)	: current(other.base())	{}
 
 		/* DESTRUCTOR */
 		~bidirectional_iterator()																{}
 
 		/* ---------- OPERATOR ---------- */
 
+		template <class U>
 		bidirectional_iterator&
 		operator=(const bidirectional_iterator<U> & other)	{ current = other.base(); return *this; }
 
