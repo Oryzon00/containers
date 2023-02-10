@@ -88,8 +88,6 @@ template <> struct is_integral_base <bool>					: ft::true_type		{};
 template <> struct is_integral_base <short>					: ft::true_type 	{};	
 template <> struct is_integral_base <char>					: ft::true_type 	{};	
 template <> struct is_integral_base <wchar_t>				: ft::true_type 	{};	
-// template <> struct is_integral_base <char16_t>				: ft::true_type 	{};
-// template <> struct is_integral_base <char32_t>				: ft::true_type 	{};	
 template <> struct is_integral_base <int>					: ft::true_type 	{};	
 template <> struct is_integral_base <long>					: ft::true_type 	{};	
 template <> struct is_integral_base <long long>				: ft::true_type		{};

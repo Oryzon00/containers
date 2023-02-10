@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <exception>
+#include <stdexcept>
 #include "iterator.hpp"
 
 namespace ft
@@ -61,7 +62,7 @@ class vector
 
 		/* FILL CONSTRUCTOR */
 		explicit vector(size_type n, const value_type & val = value_type(),
-						const allocator_type & alloc = allocator_type)	:
+						const allocator_type & alloc = allocator_type())	:
 			_alloc(alloc), _array(NULL), _capacity(n), _size(n)
 		{
 			_array = _alloc.allocate(_capacity);
@@ -91,10 +92,45 @@ class vector
 
 		/* ---------- ITERATORS ----------- */
 
+		iterator				begin()				{ return iterator(_array); 					}
+		const_iterator			begin()		const	{ return const_iterator(_array);			}
+		
+		iterator				end()				{ return iterator(_array + _size);			}
+		const_iterator			end()		const	{ return const_iterator(_array + _size);	}
 
+		reverse_iterator		rbegin()			{ return reverse_iterator(end());			}
+		const_reverse_iterator	rbegin()	const	{ return const_reverse_iterator(end());		}
+
+		reverse_iterator		rend()				{ return reverse_iterator(begin());			}
+		const_reverse_iterator	rend()		const	{ return const_reverse_iterator(begin());	}
 
 		/* ---------- CAPACITY ----------- */
 
+		// void		resize(size_type n, value_type val = value())	{}
+		size_type	size()		const	{ return _size;				}
+		size_type	max_size()	const	{ return _alloc.max_size();	}
+		size_type	capacity()	const	{ return _capacity;			}
+		bool		empty()		const	{ return _size == 0; 		}
+
+		void	reserve(size_type new_cap)
+		{
+			if (new_cap > max_size())
+				throw std::length_error("ft::vector::reserve");
+			else if (n > _capacity)
+			{
+				pointer	new = _alloc.allocate(new_cap);
+				for (size_type i = 0; i < _size; i++)
+					_alloc.construct(&new[i], _array[i]);
+				for (size_type i = 0; i < _capacity; i++)
+					_alloc.destroy(&_array[i]);
+				_alloc.deallocate(_array, _capacity);
+				_array = new;
+				_capacity = new_cap;
+			}
+		}
+
+
+		
 
 		/* ---------- ELEMENT ACCESS ----------- */
 
