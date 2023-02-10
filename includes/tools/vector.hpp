@@ -23,6 +23,8 @@ The storage of the vector is handled automatically, being expanded as needed
 
 //Iterator invalidation???
 
+
+
 template < class T, class Allocator = std::allocator<T> >
 class vector
 {
@@ -42,21 +44,66 @@ class vector
 		typedef	typename	ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 		typedef				std::ptrdiff_t								difference_type;	
 		typedef				std::size_t									size_type;
-		
-		
-		
-
 	
 	private:
 		/* ---------- MEMBER VARIABLES ----------- */
-		Allocator	_alloc;
-		pointer		_array;
-		size_type	_allocated;
-		size_type	_size;
+		allocator_type	_alloc;
+		pointer			_array;
+		size_type		_capacity;
+		size_type		_size;
 	
 	public:
-		/* ---------- CONSTRUCTORS / DESTRUCTOR ----------- */
+		/* ---------- CONSTRUCTORS / DESTRUCTOR / COPY ----------- */
 
+		/* DEFAULT CONSTRUCTOR */
+		explicit vector(const allocator_type & alloc = allocator_type())	:
+			_alloc(alloc), _array(_alloc.allocate(0)), _capacity(0), _size(0)	{}
+
+		/* FILL CONSTRUCTOR */
+		explicit vector(size_type n, const value_type & val = value_type(),
+						const allocator_type & alloc = allocator_type)	:
+			_alloc(alloc), _array(NULL), _capacity(n), _size(n)
+		{
+			_array = _alloc.allocate(_capacity);
+			for (int i = 0; i < _capacity; i++)
+				_alloc.construct(&_array[i], val);
+
+
+			//assign(n, val);
+		}
+
+		// reserve --> insert
+		/* FILL */
+		void	assign(size_type n, const value_type & val)
+		{
+			//erase(begin(), end());
+			//ou
+			//resize(0);
+
+			//insert(begin(), n, val);
+
+		}
+
+
+		/* RANGE CONSTRUCTOR */
+
+		/* COPY CONSTRUCTOR */
+
+		/* ---------- ITERATORS ----------- */
+
+
+
+		/* ---------- CAPACITY ----------- */
+
+
+		/* ---------- ELEMENT ACCESS ----------- */
+
+
+		/* ---------- MODIFIERS ----------- */
+
+		
+
+		/* ---------- ALLOCATOR ----------- */
 
 };
 
