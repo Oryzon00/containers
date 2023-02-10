@@ -116,15 +116,15 @@ class vector
 		{
 			if (new_cap > max_size())
 				throw std::length_error("ft::vector::reserve");
-			else if (n > _capacity)
+			else if (new_cap > _capacity)
 			{
-				pointer	new = _alloc.allocate(new_cap);
+				pointer	new_array = _alloc.allocate(new_cap);
 				for (size_type i = 0; i < _size; i++)
-					_alloc.construct(&new[i], _array[i]);
+					_alloc.construct(&new_array[i], _array[i]);
 				for (size_type i = 0; i < _capacity; i++)
 					_alloc.destroy(&_array[i]);
 				_alloc.deallocate(_array, _capacity);
-				_array = new;
+				_array = new_array;
 				_capacity = new_cap;
 			}
 		}

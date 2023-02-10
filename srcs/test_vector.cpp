@@ -9,7 +9,5 @@ int	main(void)
 
 	ft::vector<int>::iterator	it; 
 
-	std::cout << 
-
 
 }
