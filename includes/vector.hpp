@@ -4,6 +4,7 @@
 #include <exception>
 #include <stdexcept>
 #include "iterator.hpp"
+#include <iterator>
 
 namespace ft
 {
@@ -53,6 +54,7 @@ class vector
 		size_type		_capacity;
 		size_type		_size;
 	
+		
 	public:
 		/* ---------- CONSTRUCTORS / DESTRUCTOR / COPY ----------- */
 
@@ -66,7 +68,7 @@ class vector
 			_alloc(alloc), _array(NULL), _capacity(n), _size(n)
 		{
 			_array = _alloc.allocate(_capacity);
-			for (int i = 0; i < _capacity; i++)
+			for (size_type i = 0; i < _capacity; i++)
 				_alloc.construct(&_array[i], val);
 
 
@@ -178,6 +180,85 @@ class vector
 			_size++;
 		}
 
+		void	pop_back()	{ _alloc.destroy(&_array[end() - 1]); _size--; } //appeler erase
+
+		iterator	insert(iterator position, const value_type & val)
+		{
+			insert(position, 1, val);
+			return iterator(&_array[std::distance(position, begin()) - 1]);
+		}
+
+		void		insert(iterator position, size_type n, const value_type & val)
+		{	
+			while (_size + n > _capacity)
+				reserve(_capacity == 0 ? n : _capacity * 2);
+
+			pointer	new_array = _alloc.allocate(_capacity);
+			size_type i = 0;
+
+			for (iterator it = begin(); it != position; it++)
+				_alloc.construct(&new_array[i++], *it);
+			for (int j = 0; j < n; j++)
+				_alloc.construct(&new_array[i++], val);
+			for (iterator it = position; it != end(); it++)
+				_alloc.construct(&new_array[i++], val);
+			for (int k = 0; k < _size; k++)
+				_alloc.destroy(&_array[k]);
+			_alloc.deallocate(_array, _size);
+			_array = new_array;
+			_size += n;
+		}
+
+		template <class InputIterator>
+		void		insert(iterator position, InputIterator first, InputIterator last)
+		{
+			difference_type n = std::distance(first, last);
+			while (_size + n > _capacity)
+				reserve(_capacity == 0 ? n : _capacity * 2);
+
+			pointer	new_array = _alloc.allocate(_capacity);
+			size_type i = 0;
+			
+			for (iterator it = begin(); it != position; it++)
+				_alloc.construct(&new_array[i++], *it);
+			for (iterator it = first; it != last; it++)
+				_alloc.construct(&new_array[i++], *it);
+			for (iterator it = position; it != end(); it++)
+				_alloc.construct(&new_array[i++], *it);
+			for (int j = 0; j < _size; j++)
+				_alloc.destroy(&_array[j]);
+			_alloc.deallocate(_array, _size);
+			_array = new_array;
+			_size += n;
+
+			
+		}
+
+		iterator	erase(iterator position)
+		{
+			if (position == end())
+				return (position);
+			return erase(position, position + 1);
+		}
+
+		iterator	erase(iterator first, iterator last)
+		{
+			pointer	new_array = _alloc.allocate(_capacity);
+			difference_type nb = std::distance(first, last);
+			difference_type	offset = first - begin();
+			size_type i = 0;
+
+			for (iterator it = begin(); it != first; it++)
+				_alloc.construct(&new_array[i++], *it);
+			for ( iterator it = last; it != end(); it++)
+				_alloc.construct(&new_array[i++], *it);
+			for (int j = 0; j < _size; j++)
+				alloc.destroy(&_array[j]);
+			_alloc.deallocate(_array, _capacity);
+			_array = new_array;
+			size -= nb;
+			return (&_array[offset]);
+		}
 
 		/* ---------- ALLOCATOR ----------- */
 
@@ -185,7 +266,6 @@ class vector
 
 
 /* ----------  NON MEMBER FUNCTIONS ---------- */
-
 
 
 
