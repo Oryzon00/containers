@@ -73,18 +73,6 @@ class vector
 			//assign(n, val);
 		}
 
-		// reserve --> insert
-		/* FILL */
-		void	assign(size_type n, const value_type & val)
-		{
-			//erase(begin(), end());
-			//ou
-			//resize(0);
-
-			//insert(begin(), n, val);
-
-		}
-
 
 		/* RANGE CONSTRUCTOR */
 
@@ -106,7 +94,7 @@ class vector
 
 		/* ---------- CAPACITY ----------- */
 
-		// void		resize(size_type n, value_type val = value())	{}
+		
 		size_type	size()		const	{ return _size;				}
 		size_type	max_size()	const	{ return _alloc.max_size();	}
 		size_type	capacity()	const	{ return _capacity;			}
@@ -114,9 +102,7 @@ class vector
 
 		void	reserve(size_type new_cap)
 		{
-			if (new_cap > max_size())
-				throw std::length_error("ft::vector::reserve");
-			else if (new_cap > _capacity)
+			if (new_cap > _capacity)
 			{
 				pointer	new_array = _alloc.allocate(new_cap);
 				for (size_type i = 0; i < _size; i++)
@@ -129,15 +115,69 @@ class vector
 			}
 		}
 
-
-		
-
 		/* ---------- ELEMENT ACCESS ----------- */
 
+		reference		operator[](size_type n)			{ return _array[n]; }
+		const_reference	operator[](size_type n)	const	{ return _array[n]; }
+
+		reference		at(size_type n)	
+		{
+			if (n >= _size)
+				throw std::out_of_range("ft::vector::at");
+			return _array[n];
+		}
+
+		const_reference	at(size_type n)
+		{
+			if (n >= _size)
+				throw std::out_of_range("ft::vector::at");
+			return _array[n];
+		}
+
+		reference		front()			{ return _array[0]; }
+		const_reference	front() const	{ return _array[0]; }
+
+		reference		back()			{ return _array[_size - 1]; }
+		const_reference	back() const	{ return _array[_size - 1]; }
 
 		/* ---------- MODIFIERS ----------- */
 
-		
+		void	resize(size_type n, value_type val = value())
+		{
+			/* if (n > _size)
+				insert(end(), n - _size, val)
+			else if (n < _size)
+				erase(begin() + n, end());
+			else
+				; */
+		}
+
+		void	assign(size_type n, const value_type & val)
+		{
+			//erase(begin(), end());
+			//ou
+			//resize(0);
+
+			//insert(begin(), n, val);
+		}
+
+		template <class InputIterator>
+		void	assign(InputIterator first, InputIterator last)
+		{
+			/* erase(begin(), end());
+			insert(begin(), first, last); */
+		}
+
+		void	push_back(const value_type & val)
+		{
+			if (_capacity == 0)
+				reserve(1);
+			else if (_size + 1 >  _capacity)
+				reserve(_capacity * 2);
+			_alloc.construct(&_array[end()], val);
+			_size++;
+		}
+
 
 		/* ---------- ALLOCATOR ----------- */
 
