@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include "iterator.hpp"
 #include <iterator>
+#include "type_traits.hpp"
 
 namespace ft
 {
@@ -22,10 +23,6 @@ This means that a pointer to an element of a vector may be passed to any functio
 that expects a pointer to an element of an array.
 The storage of the vector is handled automatically, being expanded as needed
 */
-
-//Iterator invalidation???
-
-
 
 template < class T, class Allocator = std::allocator<T> >
 class vector
@@ -153,7 +150,7 @@ class vector
 			return _array[n];
 		}
 
-		const_reference	at(size_type n)
+		const_reference	at(size_type n) const
 		{
 			if (n >= _size)
 				throw std::out_of_range("ft::vector::at");
@@ -181,10 +178,10 @@ class vector
 			insert(begin(), first, last);
 		}
 
-		void	resize(size_type n, value_type val = value())
+		void	resize(size_type n, value_type val = value_type())
 		{
 			if (n > _size)
-				insert(end(), n - _size, val)
+				insert(end(), n - _size, val);
 			else if (n < _size)
 				erase(begin() + n, end());
 			else
@@ -204,14 +201,20 @@ class vector
 		// 	_size++;
 		// }
 
-		void	clear()								{ erase(begin(), last()); }
+		void	clear()								{ erase(begin(), end()); }
 
-		void	swap(vector & x)					{ }
+		void	swap(vector & other)
+		{
+			ft::swap(_array, other._array);
+			ft::swap(_size, other._size);
+			ft::swap(_capacity, other._capacity);
+			ft::swap(_alloc, other._alloc);
+		}
 
 		iterator	insert(iterator position, const value_type & val)
 		{
 			insert(position, 1, val);
-			return iterator(&_array[std::distance(position, begin()) - 1]);
+			return iterator(&_array[std::distance<iterator>(position, begin()) - 1]);
 		}
 
 		void		insert(iterator position, size_type n, const value_type & val)
@@ -219,8 +222,8 @@ class vector
 			while (_size + n > _capacity)
 				reserve(_capacity == 0 ? n : _capacity * 2);
 
-			pointer	new_array = _alloc.allocate(_capacity);
-			size_type i = 0;
+			pointer		new_array = _alloc.allocate(_capacity);
+			size_type	i = 0;
 
 			for (iterator it = begin(); it != position; it++)
 				_alloc.construct(&new_array[i++], *it);
@@ -235,15 +238,15 @@ class vector
 			_size += n;
 		}
 
-		template <class InputIterator>
+		template <class InputIterator> //pb car InputIterator != iterator
 		void		insert(iterator position, InputIterator first, InputIterator last)
 		{
-			difference_type n = std::distance(first, last);
+			difference_type n = std::distance<InputIterator>(first, last);
 			while (_size + n > _capacity)
 				reserve(_capacity == 0 ? n : _capacity * 2);
 
-			pointer	new_array = _alloc.allocate(_capacity);
-			size_type i = 0;
+			pointer		new_array = _alloc.allocate(_capacity);
+			size_type	i = 0;
 			
 			for (iterator it = begin(); it != position; it++)
 				_alloc.construct(&new_array[i++], *it);
@@ -269,21 +272,21 @@ class vector
 
 		iterator	erase(iterator first, iterator last)
 		{
-			pointer	new_array = _alloc.allocate(_capacity);
-			difference_type nb = std::distance(first, last);
+			pointer			new_array = _alloc.allocate(_capacity);
+			difference_type	nb = std::distance<iterator>(first, last);
 			difference_type	offset = first - begin();
-			size_type i = 0;
+			size_type 		i = 0;
 
 			for (iterator it = begin(); it != first; it++)
 				_alloc.construct(&new_array[i++], *it);
 			for ( iterator it = last; it != end(); it++)
 				_alloc.construct(&new_array[i++], *it);
 			for (int j = 0; j < _size; j++)
-				alloc.destroy(&_array[j]);
+				_alloc.destroy(&_array[j]);
 			_alloc.deallocate(_array, _capacity);
 			_array = new_array;
-			size -= nb;
-			return (&_array[offset]);
+			_size -= nb;
+			return (iterator(&_array[offset]));
 		}
 
 };
@@ -291,34 +294,11 @@ class vector
 
 /* ----------  NON MEMBER FUNCTIONS ---------- */
 
-
-
-
-
-
-
+template <class T, class Alloc>
+void	swap(vector<T, Alloc> & x, vector<T, Alloc> & y)
+{
+	x.swap(y);
+}
 
 /*------------------------------------------------------------------------------------------------*/
-
-
-/*
------ BOOL SPECIALIZATION -----
-
-*/
-
-
-
-
-template < class Allocator >
-class vector <bool, Allocator >
-{
-	/* ---------- MEMBER VARIABLES ----------- */
-
-	/* ---------- MEMBER TYPES ----------- */
-
-
-	/* ---------- CONSTRUCTORS / DESTRUCTOR ----------- */
-
-
-};
-};
+}
