@@ -65,20 +65,41 @@ class vector
 		/* FILL CONSTRUCTOR */
 		explicit vector(size_type n, const value_type & val = value_type(),
 						const allocator_type & alloc = allocator_type())	:
-			_alloc(alloc), _array(NULL), _capacity(n), _size(n)
+			_alloc(alloc), _array(NULL), _capacity(0), _size(0) //0 ou n?
 		{
-			_array = _alloc.allocate(_capacity);
-			for (size_type i = 0; i < _capacity; i++)
-				_alloc.construct(&_array[i], val);
-
-
-			//assign(n, val);
+			assign(n, val);
 		}
 
-
 		/* RANGE CONSTRUCTOR */
+		template <class InputIterator>
+		vector(InputIterator first, InputIterator last,
+			   const allocator_type & alloc = allocator_type())	:
+			_alloc(alloc), _array(NULL), _capacity(0), _size(0) //0 ou n?
+		{
+			assign(first, last);
+		}
 
 		/* COPY CONSTRUCTOR */
+		vector(const vector & other)	:
+			_alloc(other.alloc), _array(NULL), _capacity(0), _size(0) //0 ou n?
+		{
+			// assign(other.begin(), other.end());
+			*this = other;
+		}
+
+		/* DESTRUCTOR */
+		~vector()
+		{
+			clear();
+			_alloc.deallocate(_array, _capacity);
+		}
+
+		/* OPERATOR= */
+		vector&	operator=(const vector& other)
+		{
+			
+			assign(other.begin(), other.end());
+		}
 
 		/* ---------- ITERATORS ----------- */
 
@@ -93,6 +114,9 @@ class vector
 
 		reverse_iterator		rend()				{ return reverse_iterator(begin());			}
 		const_reverse_iterator	rend()		const	{ return const_reverse_iterator(begin());	}
+
+		/* ---------- ALLOCATOR ----------- */
+		allocator_type get_allocator()		const	{ return _alloc; }
 
 		/* ---------- CAPACITY ----------- */
 
@@ -144,43 +168,45 @@ class vector
 
 		/* ---------- MODIFIERS ----------- */
 
-		void	resize(size_type n, value_type val = value())
-		{
-			/* if (n > _size)
-				insert(end(), n - _size, val)
-			else if (n < _size)
-				erase(begin() + n, end());
-			else
-				; */
-		}
-
 		void	assign(size_type n, const value_type & val)
 		{
-			//erase(begin(), end());
-			//ou
-			//resize(0);
-
-			//insert(begin(), n, val);
+			erase(begin(), end());
+			insert(begin(), n, val);
 		}
 
 		template <class InputIterator>
 		void	assign(InputIterator first, InputIterator last)
 		{
-			/* erase(begin(), end());
-			insert(begin(), first, last); */
+			erase(begin(), end());
+			insert(begin(), first, last);
 		}
 
-		void	push_back(const value_type & val)
+		void	resize(size_type n, value_type val = value())
 		{
-			if (_capacity == 0)
-				reserve(1);
-			else if (_size + 1 >  _capacity)
-				reserve(_capacity * 2);
-			_alloc.construct(&_array[end()], val);
-			_size++;
+			if (n > _size)
+				insert(end(), n - _size, val)
+			else if (n < _size)
+				erase(begin() + n, end());
+			else
+				;
 		}
 
-		void	pop_back()	{ _alloc.destroy(&_array[end() - 1]); _size--; } //appeler erase
+		
+
+		void	pop_back()							{ erase(end() - 1); }
+		void	push_back(const value_type & val)	{ insert(end(), val); }
+		// {
+		// 	if (_capacity == 0)
+		// 		reserve(1);
+		// 	else if (_size + 1 >  _capacity)
+		// 		reserve(_capacity * 2);
+		// 	_alloc.construct(&_array[end()], val);
+		// 	_size++;
+		// }
+
+		void	clear()								{ erase(begin(), last()); }
+
+		void	swap(vector & x)					{ }
 
 		iterator	insert(iterator position, const value_type & val)
 		{
@@ -259,8 +285,6 @@ class vector
 			size -= nb;
 			return (&_array[offset]);
 		}
-
-		/* ---------- ALLOCATOR ----------- */
 
 };
 
