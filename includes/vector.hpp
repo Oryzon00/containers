@@ -98,7 +98,6 @@ class vector
 		/* OPERATOR= */
 		vector&	operator=(const vector& other)
 		{
-			
 			assign(other.begin(), other.end());
 		}
 
@@ -134,6 +133,8 @@ class vector
 				pointer	new_array = _alloc.allocate(new_cap);
 				for (size_type i = 0; i < _size; i++)
 					_alloc.construct(&new_array[i], _array[i]);
+				for (size_type i = _size; i < _capacity; i++)
+					_alloc.construct(&new_array[i], value_type());
 				for (size_type i = 0; i < _capacity; i++)
 					_alloc.destroy(&_array[i]);
 				_alloc.deallocate(_array, _capacity);
@@ -214,74 +215,87 @@ class vector
 		{	
 			while (_size + n > _capacity)
 				reserve(_capacity == 0 ? n : _capacity * 2);
+			difference_type	pos_insert = position - begin();
 
-			pointer		new_array = _alloc.allocate(_capacity);
-			size_type	i = 0;
+			//deplacer membre actuel apres position de n vers la droite
+			//partir de la fin
 
-			for (iterator it = begin(); it != position; it++)
-				_alloc.construct(&new_array[i++], *it);
-			for (int j = 0; j < n; j++)
-				_alloc.construct(&new_array[i++], val);
-			for (iterator it = position; it != end(); it++)
-				_alloc.construct(&new_array[i++], val);
-			for (int k = 0; k < _size; k++)
-				_alloc.destroy(&_array[k]);
-			_alloc.deallocate(_array, _size);
-			_array = new_array;
+
+			//inserer n membres de valeur val avant position
+			for (size_type i = 0; i < n; i++)
+				_alloc.construct(&_array[pos_insert + i], val);
 			_size += n;
 		}
+		// while (_size + n > _capacity)
+		// 	reserve(_capacity == 0 ? n : _capacity * 2);
+
+		// pointer		new_array = _alloc.allocate(_capacity);
+		// size_type	i = 0;
+
+		// for (iterator it = begin(); it != position; it++)
+		// 	_alloc.construct(&new_array[i++], *it);
+		// for (int j = 0; j < n; j++)
+		// 	_alloc.construct(&new_array[i++], val);
+		// for (iterator it = position; it != end(); it++)
+		// 	_alloc.construct(&new_array[i++], val);
+		// for (int k = 0; k < _size; k++)
+		// 	_alloc.destroy(&_array[k]);
+		// _alloc.deallocate(_array, _size);
+		// _array = new_array;
+		// _size += n;
 
 		template <class InputIterator> 
-		void		insert(iterator position, InputIterator first, InputIterator last
+		void		insert(iterator position, InputIterator first, InputIterator last,
 					typename enable_if<!is_integral<InputIterator>::value>::type* = NULL)
 		{
-			difference_type n = ft::distance(first, last);
-			while (_size + n > _capacity)
-				reserve(_capacity == 0 ? n : _capacity * 2);
-
-			pointer		new_array = _alloc.allocate(_capacity);
-			size_type	i = 0;
-			
-			for (iterator it = begin(); it != position; it++)
-				_alloc.construct(&new_array[i++], *it);
-			for (iterator it = first; it != last; it++)
-				_alloc.construct(&new_array[i++], *it);
-			for (iterator it = position; it != end(); it++)
-				_alloc.construct(&new_array[i++], *it);
-			for (int j = 0; j < _size; j++)
-				_alloc.destroy(&_array[j]);
-			_alloc.deallocate(_array, _size);
-			_array = new_array;
-			_size += n;
-
 			
 		}
+		// difference_type n = ft::distance(first, last);
+		// while (_size + n > _capacity)
+		// 	reserve(_capacity == 0 ? n : _capacity * 2);
+
+		// pointer		new_array = _alloc.allocate(_capacity);
+		// size_type	i = 0;
+		
+		// for (iterator it = begin(); it != position; it++)
+		// 	_alloc.construct(&new_array[i++], *it);
+		// for (iterator it = first; it != last; it++)
+		// 	_alloc.construct(&new_array[i++], *it);
+		// for (iterator it = position; it != end(); it++)
+		// 	_alloc.construct(&new_array[i++], *it);
+		// for (int j = 0; j < _size; j++)
+		// 	_alloc.destroy(&_array[j]);
+		// _alloc.deallocate(_array, _size);
+		// _array = new_array;
+		// _size += n;
 
 		iterator	erase(iterator position)
 		{
 			if (position == end())
 				return (position);
 			return erase(position, position + 1);
+
 		}
 
 		iterator	erase(iterator first, iterator last)
 		{
-			pointer			new_array = _alloc.allocate(_capacity);
-			difference_type	nb = ft::distance(first, last);
-			difference_type	offset = first - begin();
-			size_type 		i = 0;
-
-			for (iterator it = begin(); it != first; it++)
-				_alloc.construct(&new_array[i++], *it);
-			for ( iterator it = last; it != end(); it++)
-				_alloc.construct(&new_array[i++], *it);
-			for (int j = 0; j < _size; j++)
-				_alloc.destroy(&_array[j]);
-			_alloc.deallocate(_array, _capacity);
-			_array = new_array;
-			_size -= nb;
-			return (iterator(&_array[offset]));
+			
 		}
+		// pointer			new_array = _alloc.allocate(_capacity);
+		// difference_type	nb = ft::distance(first, last);
+		// difference_type	offset = first - begin();
+		// size_type 		i = 0;
+
+		// for (iterator it = begin(); it != first; it++)
+		// 	_alloc.construct(&new_array[i++], *it);
+		// for ( iterator it = last; it != end(); it++)
+		// 	_alloc.construct(&new_array[i++], *it);
+		// for (int j = 0; j < _size; j++)
+		// 	_alloc.destroy(&_array[j]);
+		// _alloc.deallocate(_array, _capacity);
+		// _array = new_array;
+		// _size -= nb;
+		// return (iterator(&_array[offset]));
 
 };
 
