@@ -3,9 +3,13 @@
 #include <memory>
 #include <exception>
 #include <stdexcept>
-#include "iterator.hpp"
+#include <algorithm>
 #include <iterator>
+
+#include "iterator.hpp"
 #include "type_traits.hpp"
+#include "lexicographical_compare.hpp"
+
 
 namespace ft
 {
@@ -188,19 +192,8 @@ class vector
 				;
 		}
 
-		
-
 		void	pop_back()							{ erase(end() - 1); }
 		void	push_back(const value_type & val)	{ insert(end(), val); }
-		// {
-		// 	if (_capacity == 0)
-		// 		reserve(1);
-		// 	else if (_size + 1 >  _capacity)
-		// 		reserve(_capacity * 2);
-		// 	_alloc.construct(&_array[end()], val);
-		// 	_size++;
-		// }
-
 		void	clear()								{ erase(begin(), end()); }
 
 		void	swap(vector & other)
@@ -299,6 +292,49 @@ void	swap(vector<T, Alloc> & x, vector<T, Alloc> & y)
 {
 	x.swap(y);
 }
+
+/* RELATIONAL OPERATORS */
+
+template <class T, class Alloc>
+  bool operator== (const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs)
+{
+	if (lhs.size() != rhs.size())
+		return false;
+	return std::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template <class T, class Alloc>
+  bool operator!= (const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs)
+{
+	return !(lhs == rhs);
+}
+
+template <class T, class Alloc>
+  bool operator<  (const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs)
+{
+	return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template <class T, class Alloc>
+  bool operator<= (const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs)
+{
+	return !(rhs < lhs);
+}
+
+template <class T, class Alloc>
+  bool operator>  (const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs)
+{
+	return rhs < lhs;
+}
+
+template <class T, class Alloc>
+  bool operator>= (const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs)
+{
+	return !(lhs < rhs);
+}
+
+
+
 
 /*------------------------------------------------------------------------------------------------*/
 }
