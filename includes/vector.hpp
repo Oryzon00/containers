@@ -1,10 +1,10 @@
 #pragma once
 
-#include <memory>
-#include <exception>
-#include <stdexcept>
-#include <algorithm>
-#include <iterator>
+#include <memory>		//std::allocator
+#include <cstddef>		//std::ptrdiff_t | std::size_t
+#include <stdexcept>	//std::out_of_range
+#include <algorithm>	//std::equal
+#include <iterator>		//std::distance
 
 #include "iterator.hpp"
 #include "type_traits.hpp"
@@ -207,7 +207,7 @@ class vector
 		iterator	insert(iterator position, const value_type & val)
 		{
 			insert(position, 1, val);
-			return iterator(&_array[std::distance<iterator>(position, begin()) - 1]);
+			return iterator(&_array[ft::distance(position, begin()) - 1]);
 		}
 
 		void		insert(iterator position, size_type n, const value_type & val)
@@ -231,10 +231,10 @@ class vector
 			_size += n;
 		}
 
-		template <class InputIterator> //pb car InputIterator != iterator
-		void		insert(iterator position, InputIterator first, InputIterator last)
+		template <class InputIterator> 
+		void		insert(iterator position, InputIterator first, InputIterator last) //enableif?
 		{
-			difference_type n = std::distance<InputIterator>(first, last);
+			difference_type n = ft::distance(first, last);
 			while (_size + n > _capacity)
 				reserve(_capacity == 0 ? n : _capacity * 2);
 
@@ -266,7 +266,7 @@ class vector
 		iterator	erase(iterator first, iterator last)
 		{
 			pointer			new_array = _alloc.allocate(_capacity);
-			difference_type	nb = std::distance<iterator>(first, last);
+			difference_type	nb = ft::distance(first, last);
 			difference_type	offset = first - begin();
 			size_type 		i = 0;
 
