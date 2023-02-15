@@ -113,4 +113,18 @@ void	swap(T & a, T & b)
 }
 
 /*------------------------------------------------------------------------------------------------*/
+
+/* ----- DISTANCE ------ */
+
+template<class InputIterator>
+typename ft::iterator_traits<InputIterator>::difference_type distance (InputIterator first, InputIterator last)
+{
+	typename ft::iterator_traits<InputIterator>::difference_type rtn = 0;
+	while (first != last)
+	{
+		first++;
+		rtn++;
+	}
+	return (rtn);
+}
 };
