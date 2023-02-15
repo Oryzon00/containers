@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include "vector.hpp"
 
 
 namespace ft
@@ -17,7 +17,7 @@ one end of the container.
 */
 
 /* Change std::vector by ft::vector */
-template < class T, class Container = std::vector<T> >
+template < class T, class Container = ft::vector<T> >
 class stack
 {
 	public:
