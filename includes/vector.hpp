@@ -232,7 +232,8 @@ class vector
 		}
 
 		template <class InputIterator> 
-		void		insert(iterator position, InputIterator first, InputIterator last) //enableif?
+		void		insert(iterator position, InputIterator first, InputIterator last
+					typename enable_if<!is_integral<InputIterator>::value>::type* = NULL)
 		{
 			difference_type n = ft::distance(first, last);
 			while (_size + n > _capacity)
