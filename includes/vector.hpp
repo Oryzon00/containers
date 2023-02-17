@@ -208,22 +208,23 @@ class vector
 		iterator	insert(iterator position, const value_type & val)
 		{
 			insert(position, 1, val);
-			return iterator(&_array[ft::distance(position, begin()) - 1]);
+			return iterator(&_array[std::distance(position, begin()) - 1]);
 		}
 
 		void		insert(iterator position, size_type n, const value_type & val)
-		{	
+		{
+			difference_type	index_insert = position - begin();
+			if (n == 0)
+				return ;
 			while (_size + n > _capacity)
 				reserve(_capacity == 0 ? n : _capacity * 2);
-			difference_type	pos_insert = position - begin();
-
-			//deplacer membre actuel apres position de n vers la droite
-			//partir de la fin
-
-
-			//inserer n membres de valeur val avant position
+			if (_size > 0 && position != end())
+			{
+				for (size_type i = _size - 1; i >= index_insert; i--)
+				_alloc.construct(&_array[i + n], _array[i]);
+			}
 			for (size_type i = 0; i < n; i++)
-				_alloc.construct(&_array[pos_insert + i], val);
+				_alloc.construct(&_array[index_insert + i], val);
 			_size += n;
 		}
 		// while (_size + n > _capacity)
@@ -248,9 +249,23 @@ class vector
 		void		insert(iterator position, InputIterator first, InputIterator last,
 					typename enable_if<!is_integral<InputIterator>::value>::type* = NULL)
 		{
+			difference_type	n = std::distance(first, last); //n = ?
+			difference_type	index_insert = position - begin();
+			if (n == 0)
+				return ;
+			while (_size + n > _capacity)
+				reserve(_capacity == 0 ? n : _capacity * 2);
+			if (_size > 0 && position != end())
+			{
+				for (size_type i = _size() - 1; i >= index_insert; i--)
+					_alloc.construct(&_array[i + n], _array[i]);
+			}
+			for(size_type i = 0; i < n; i++)
+				_alloc.construct(&_array[i + index_insert], )
+			
 			
 		}
-		// difference_type n = ft::distance(first, last);
+		// difference_type n = std::distane(first, last);
 		// while (_size + n > _capacity)
 		// 	reserve(_capacity == 0 ? n : _capacity * 2);
 
@@ -282,7 +297,7 @@ class vector
 			
 		}
 		// pointer			new_array = _alloc.allocate(_capacity);
-		// difference_type	nb = ft::distance(first, last);
+		// difference_type	nb = std::distane(first, last);
 		// difference_type	offset = first - begin();
 		// size_type 		i = 0;
 
