@@ -98,33 +98,8 @@ template <> struct is_integral_base <unsigned long>			: ft::true_type 	{};
 template <> struct is_integral_base <unsigned long long>	: ft::true_type 	{};
 
 template <class T> struct is_integral	: is_integral_base <typename ft::remove_cv<T>::type>	{};
-/*------------------------------------------------------------------------------------------------*/
-
-/*
------ SWAP -----
-*/
-
-template <class T>
-void	swap(T & a, T & b)
-{
-	T	tmp(a); // tmp = a (a voir sur les swaps de vector et les iters)
-	a = b;
-	b = tmp;
-}
 
 /*------------------------------------------------------------------------------------------------*/
 
-/* ----- DISTANCE ------ */
 
-template<class InputIterator>
-typename ft::iterator_traits<InputIterator>::difference_type distance (InputIterator first, InputIterator last)
-{
-	typename ft::iterator_traits<InputIterator>::difference_type rtn = 0;
-	while (first != last)
-	{
-		first++;
-		rtn++;
-	}
-	return (rtn);
 }
-};

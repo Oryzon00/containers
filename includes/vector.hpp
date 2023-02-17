@@ -4,11 +4,10 @@
 #include <cstddef>		//std::ptrdiff_t | std::size_t
 #include <stdexcept>	//std::out_of_range
 #include <algorithm>	//std::equal
-#include <iterator>		//std::distance
 
 #include "iterator.hpp"
 #include "type_traits.hpp"
-#include "lexicographical_compare.hpp"
+#include "algorithm.hpp"
 
 
 namespace ft
@@ -82,7 +81,7 @@ class vector
 
 		/* COPY CONSTRUCTOR */
 		vector(const vector & other)	:
-			_alloc(other.alloc), _array(NULL), _capacity(0), _size(0) //0 ou n?
+			_alloc(other._alloc), _array(NULL), _capacity(0), _size(0) //0 ou n?
 		{
 			// assign(other.begin(), other.end());
 			*this = other;
@@ -99,6 +98,7 @@ class vector
 		vector&	operator=(const vector& other)
 		{
 			assign(other.begin(), other.end());
+			return (*this);
 		}
 
 		/* ---------- ITERATORS ----------- */
@@ -230,23 +230,6 @@ class vector
 				_alloc.construct(&_array[index_insert + i], val);
 			_size += n;
 		}
-		// while (_size + n > _capacity)
-		// 	reserve(_capacity == 0 ? n : _capacity * 2);
-
-		// pointer		new_array = _alloc.allocate(_capacity);
-		// size_type	i = 0;
-
-		// for (iterator it = begin(); it != position; it++)
-		// 	_alloc.construct(&new_array[i++], *it);
-		// for (int j = 0; j < n; j++)
-		// 	_alloc.construct(&new_array[i++], val);
-		// for (iterator it = position; it != end(); it++)
-		// 	_alloc.construct(&new_array[i++], val);
-		// for (int k = 0; k < _size; k++)
-		// 	_alloc.destroy(&_array[k]);
-		// _alloc.deallocate(_array, _size);
-		// _array = new_array;
-		// _size += n;
 
 		template <class InputIterator> 
 		void		insert(iterator position, InputIterator first, InputIterator last,
@@ -272,24 +255,6 @@ class vector
 			_size += n;
 			
 		}
-		// difference_type n = std::distane(first, last);
-		// while (_size + n > _capacity)
-		// 	reserve(_capacity == 0 ? n : _capacity * 2);
-
-		// pointer		new_array = _alloc.allocate(_capacity);
-		// size_type	i = 0;
-		
-		// for (iterator it = begin(); it != position; it++)
-		// 	_alloc.construct(&new_array[i++], *it);
-		// for (iterator it = first; it != last; it++)
-		// 	_alloc.construct(&new_array[i++], *it);
-		// for (iterator it = position; it != end(); it++)
-		// 	_alloc.construct(&new_array[i++], *it);
-		// for (int j = 0; j < _size; j++)
-		// 	_alloc.destroy(&_array[j]);
-		// _alloc.deallocate(_array, _size);
-		// _array = new_array;
-		// _size += n;
 
 		iterator	erase(iterator position)
 		{
@@ -311,21 +276,6 @@ class vector
 			return iterator(&_array[index_first]);
 			//pas de detroy?
 		}
-		// pointer			new_array = _alloc.allocate(_capacity);
-		// difference_type	nb = std::distane(first, last);
-		// difference_type	offset = first - begin();
-		// size_type 		i = 0;
-
-		// for (iterator it = begin(); it != first; it++)
-		// 	_alloc.construct(&new_array[i++], *it);
-		// for ( iterator it = last; it != end(); it++)
-		// 	_alloc.construct(&new_array[i++], *it);
-		// for (int j = 0; j < _size; j++)
-		// 	_alloc.destroy(&_array[j]);
-		// _alloc.deallocate(_array, _capacity);
-		// _array = new_array;
-		// _size -= nb;
-		// return (iterator(&_array[offset]));
 
 };
 

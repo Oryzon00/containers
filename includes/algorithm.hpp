@@ -1,5 +1,7 @@
 #pragma once
 
+#include "iterator.hpp"
+
 namespace ft
 {
 
@@ -40,9 +42,34 @@ bool	lexicographical_compare(InputIt1 first1, InputIt1 last1,
 	return (first1 == last1) && (first2 != last2);
 }	
 
+/*
+----- SWAP -----
+*/
+
+template <class T>
+void	swap(T & a, T & b)
+{
+	T	tmp(a); // tmp = a (a voir sur les swaps de vector et les iters)
+	a = b;
+	b = tmp;
+}
 
 /*------------------------------------------------------------------------------------------------*/
 
+/* ----- DISTANCE ------ */
 
+template<class InputIterator>
+typename ft::iterator_traits<InputIterator>::difference_type distance (InputIterator first, InputIterator last)
+{
+	typename ft::iterator_traits<InputIterator>::difference_type rtn = 0;
+	while (first != last)
+	{
+		first++;
+		rtn++;
+	}
+	return (rtn);
+}
+
+/*------------------------------------------------------------------------------------------------*/
 
 }
